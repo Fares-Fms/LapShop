@@ -1,0 +1,80 @@
+﻿@model List<Lap_Shop.Models.VwItem>
+<center>
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Items Table</h4>
+                <div class="col-12">
+                    <select asp-items="@(new SelectList(ViewBag.category,"CategoryId","CategoryName"))" onchange="search(this)"></select>
+                    <a href="/admin/Items/Edit1">
+                        <button type="button" class="btn btn-inverse-info btn-fw" href="">Add Laptop</button>
+                    </a>
+                    <table class="table table-striped" id="order-listing">
+                        <thead>
+                            <tr>
+                                <th> Item Image </th>
+                                <th> Item Name </th>
+                                <th> Category Name </th>
+                                <th> item type </th>
+                                <th> item price </th>
+                                <th> Action</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var cat in Model)
+                            {
+                                <tr style="margin:0px;padding:0px;">
+                                    <td class="col-md-8">
+                                       
+                                            <img src="/Uploads/Items/@cat.ImageName" />
+                                       
+                                      
+                                    </td>
+                                   
+                                    <td class="col-md-8">@cat.ItemName</td>
+                                    <td class="col-md-8">@cat.CategoryName</td>
+                                    <td class="col-md-8">@cat.ItemTypeName</td>
+                                    <td class="col-md-8">@cat.SalesPrice</td>
+                                  
+
+
+                                    <td class="text-right">
+                                        <a style="height:max-content"
+                                           asp-controller="Items" asp-action="Edit1" asp-route-itemId="@cat.ItemId"
+                                           class="btn btn-info btn-fw">Edit</a>
+                                        <a style="height:max-content"
+                                           asp-controller="Items" asp-action="Show" asp-route-itemId="@cat.ItemId"
+                                           class="btn btn-light"> <i class="mdi mdi-eye text-primary"></i>Show</a>
+
+                                        <a asp-controller="Items" asp-action="Delete" asp-route-itemId="@cat.ItemId"
+                                           class="btn btn-light"
+                                           onclick="return confirm(" Are you sure");"> <i class="mdi mdi-close text-danger"></i>Remove</a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</center>
+@section script {
+    <!-- Plugin js for this page -->
+    <script src="~/Admin/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/Admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page -->
+    <script src="~/Admin/js/data-table.js"></script>
+    <!-- End custom js for this page -->
+    <script>
+        function search(btn) {
+            var id = $(btn).val();
+            window.location.href = "/admin/Items/Search/" + id;
+        }
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿
+@model Lap_Shop.Models.TbItem
+<center>
+    @if (@Model.ImageName=="")
+    {
+        <h1>this category has no picture</h1>
+    }
+    else
+    {
+        <img src="/Uploads/Category/@Model.ImageName" height="300px" width="600px" />
+    }
+    
+<div class="col-lg-10 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Employee Table</h4>
+            <div class="col-12">
+                
+
+            <table class="table table-striped" id="order-listing">
+                <thead>
+                    <tr>
+                                <th> item ID </th>
+                        <th> item name </th>
+                        <th> GPU </th>
+                        <th> CPU </th>
+                        <th> RAM </th>
+                        <th> Hard disk </th>
+                                <th> CreatedBy </th>
+                                <th> Creation date </th>
+                                <th>UpdatedBy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                                
+                                    <tr style="margin:0px;padding:0px;">
+                                        <td class="col-md-8">@Model.ItemId</td>
+                                        <td class="col-md-8">@Model.ItemName</td>
+                                        <td class="col-md-8">@Model.Gpu</td>
+                                        <td class="col-md-8">@Model.Processor</td>
+                                        <td class="col-md-8">@Model.RamSize</td>
+                                        <td class="col-md-8">@Model.HardDisk</td>
+                                        <td class="col-md-8">@Model.CreatedBy</td>
+                                        <td class="col-md-8">@Model.CreatedDate</td>
+                                        <td class="col-md-8">@Model.UpdatedBy</td>
+                         
+                                    </tr>
+                                
+                    
+                </tbody>
+            </table>
+
+                    <a asp-controller="Items" asp-action="Delete" asp-route-ItemId="@Model.ItemId"
+                       class="btn btn-light"
+                       onclick="return confirm(" Are you sure");"> <i class="mdi mdi-close text-danger"></i>Remove</a>
+                    <a style="height:max-content"
+                       asp-controller="Items" asp-action="Edit1" asp-route-ItemId="@Model.ItemId"
+                       class="btn btn-info btn-fw">Edit</a>
+                    
+                </div> 
+        </div>
+    </div>
+</div>
+</center>
+@section script {
+    <!-- Plugin js for this page -->
+    <script src="~/Admin/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/Admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page -->
+    <script src="~/Admin/js/data-table.js"></script>
+    <!-- End custom js for this page -->
+}

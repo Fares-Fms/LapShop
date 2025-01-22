@@ -1,0 +1,200 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #chatContainer {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+            .message.you {
+                background-color: #d1ffd1;
+                text-align: right;
+                margin-left: auto;
+            }
+
+            .message.them {
+                background-color: #ffe6e6;
+                text-align: left;
+                margin-right: auto;
+            }
+
+        #userSelect, #messageInput, #sendButton {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        #userSelect {
+            width: 100%;
+        }
+
+        #messageInput {
+            width: 80%;
+        }
+
+        #sendButton {
+            width: 18%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            #sendButton:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <h1>Chat Application</h1>
+    <input type="hidden" id="currentUsername" value="@User.Identity.Name" />
+
+    <!-- Dropdown to select the receiver -->
+    <select id="userSelect" class="form-select">
+        <!-- User options will be populated dynamically -->
+    </select>
+
+    <!-- Chat messages container -->
+    <div id="chatContainer"></div>
+
+    <!-- Input for new message -->
+    <input type="text" id="messageInput" placeholder="Type your message here">
+    <button id="sendButton">Send</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const currentUsername = document.getElementById('currentUsername').value;
+        let selectedUserId = '';
+        let selectedUserName = '';
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/Users');
+                if (!response.ok) throw new Error('Failed to load users');
+
+                const users = await response.json();
+                const userSelect = document.getElementById('userSelect');
+
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.userName;
+                    option.textContent = `${user.firstname} ${user.lastname}`;
+                    userSelect.appendChild(option);
+                });
+
+                userSelect.addEventListener('change', (event) => {
+                    selectedUserId = event.target.value;
+                    selectedUserName = userSelect.options[userSelect.selectedIndex].text;
+                    loadMessages();
+                });
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        async function loadMessages() {
+            if (!selectedUserId) return;
+
+            try {
+                const apiUrl = `/api/Messages/${currentUsername}/${selectedUserId}`;
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Failed to load messages');
+
+                const messages = await response.json();
+                const chatContainer = document.getElementById('chatContainer');
+                chatContainer.innerHTML = '';
+
+                messages.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    if (message.senderId === currentUsername) {
+                        messageElement.classList.add('message', 'you'); // الرسائل المرسلة باللون الأخضر
+                        messageElement.textContent = `أنا: ${message.content}`;
+                    } else {
+                        messageElement.classList.add('message', 'them'); // الرسائل المستلمة باللون الأحمر
+                        messageElement.textContent = `${selectedUserName}: ${message.content}`;
+                    }
+                    chatContainer.appendChild(messageElement);
+                });
+
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/chatHub')
+            .build();
+
+        connection.on('ReceiveMessage', (sender, message) => {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageElement = document.createElement('div');
+            if (sender === currentUsername) {
+                messageElement.classList.add('message', 'you');
+                messageElement.textContent = `أنا: ${message}`;
+            } else {
+                messageElement.classList.add('message', 'them');
+                messageElement.textContent = `${sender}: ${message}`;
+            }
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+
+        async function startConnection() {
+            try {
+                await connection.start();
+                console.log('SignalR Connected.');
+            } catch (err) {
+                console.error('Error connecting to SignalR:', err);
+                setTimeout(startConnection, 5000);
+            }
+        }
+
+        document.getElementById('sendButton').addEventListener('click', async () => {
+            if (selectedUserId && document.getElementById('messageInput').value.trim()) {
+                const content = document.getElementById('messageInput').value;
+                try {
+                    await connection.invoke('SendMessage', selectedUserId, content);
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', 'you');
+                    messageElement.textContent = `me: ${content}`;
+                    document.getElementById('chatContainer').appendChild(messageElement);
+                    document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+                } catch (err) {
+                    console.error('Failed to send message:', err);
+                }
+                document.getElementById('messageInput').value = '';
+            }
+        });
+
+        startConnection();
+        loadUsers();
+    </script>
+</body>
+</html>

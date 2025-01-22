@@ -1,0 +1,68 @@
+﻿@model VmEditUser
+
+
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title"> Form elements </h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Form elements</li>
+            </ol>
+        </nav>
+    </div>
+    <center>
+    <form class="forms-sample" method="post" enctype="multipart/form-data"
+          asp-controller="Account" asp-action="Add" role="form">
+        <div class="row">
+
+
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Default form</h4>
+                        <p class="card-description"> Basic form layout </p>
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">UserName</label>
+                            <input asp-for="username" type="text" class="form-control" placeholder="User Name">
+                            <span asp-validation-for="username" class="alert-danger"></span>
+                            <input type="hidden" asp-for="userid" />
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">role</label>
+                                <select asp-for="selectedRole" asp-items="@(Model.roles != null ? new SelectList(Model.roles, "Value", "Text") : null)" class="form-select">                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">FirstName</label>
+                            <input asp-for="FirstName" type="text" class="form-control" placeholder="First Name">
+                            <span asp-validation-for="FirstName" class="alert-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">lastName</label>
+                            <input asp-for="LastName" type="text" class="form-control" placeholder="lastName">
+                            <span asp-validation-for="LastName" class="alert-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">Email</label>
+                            <input asp-for="Email" type="text" class="form-control" placeholder="Email">
+                            <span asp-validation-for="Email" class="alert-danger"></span>
+                        </div>
+                            <div class="form-group">
+                                <label for="exampleInputUsername1">password</label>
+                                <input  type="password" class="form-control" placeholder="Password" name="password">
+                       <p>please use capital letters , numbers and (* / > #@@!)</p>
+                            </div>
+                        <button type="submit" formmethod="post" class="btn btn-gradient-primary me-2">save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </center>
+</div>

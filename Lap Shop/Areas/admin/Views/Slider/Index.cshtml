@@ -1,0 +1,65 @@
+﻿@model List<Lap_Shop.Models.TbSlider>
+<center>
+    <div class="col-lg-10 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Employee Table</h4>
+                <div class="col-12">
+
+                    <a style="height:max-content"
+                       asp-controller="Slider" asp-action="Edit"
+                       class="btn btn-info btn-fw">Add new user</a>
+
+                    <table class="table table-striped" id="order-listing">
+                        <thead>
+                            <tr>
+                                <th>  image </th>
+                                <th> Title </th>
+                                <th> action </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var cat in Model)
+                            {
+                                <tr style="margin:0px;padding:0px;">
+                                    <td class="col-md-8">
+
+                                        <img src="/Uploads/sliders/@cat.ImageName" />
+
+
+                                    </td>
+                                    <td class="col-md-8">@cat.Title</td>
+                                    <td class="text-right">
+
+                                        <a style="height:max-content"
+                                           asp-controller="Categores" asp-action="Edit1" asp-route-SliderId="@cat.SliderId"
+                                           class="btn btn-info btn-fw">Edit</a>
+                                        <a style="height:max-content"
+                                           asp-controller="Categores" asp-action="Show" asp-route-SliderId="@cat.SliderId"
+                                           class="btn btn-light"> <i class="mdi mdi-eye text-primary"></i>Show</a>
+
+                                        <a asp-controller="Slider" asp-action="Delete" asp-route-SliderId="@cat.SliderId"
+                                           class="btn btn-light"
+                                           onclick="return confirm(" Are you sure");"> <i class="mdi mdi-close text-danger"></i>Remove</a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</center>
+@section script {
+    <!-- Plugin js for this page -->
+    <script src="~/Admin/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/Admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page -->
+    <script src="~/Admin/js/data-table.js"></script>
+    <!-- End custom js for this page -->
+}

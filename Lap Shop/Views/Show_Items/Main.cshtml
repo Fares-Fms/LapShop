@@ -1,0 +1,175 @@
+﻿@model VmShowItem
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h2>product</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Lap top</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb End -->
+    <!-- section start -->
+    <section>
+        <div class="collection-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="product-slick">
+                            <div>
+                                <img src="~/Uploads/Items/@Model.itemsDetail.ImageName" alt=""
+                                     class="img-fluid blur-up lazyload image_zoom_cls-0">
+                            </div>
+                         
+                        </div>
+                       
+                    </div>
+
+                    <div class="col-lg-6 rtl-text">
+                        <div class="product-right">
+                            <h2 class="mb-0">@Model.itemsDetail.ItemName</h2>
+                            <h5 class="mb-2">by <a >@Model.itemsDetail.CategoryName</a></h5>
+                            <h4><del>$@Model.itemsDetail.SalesPrice</del><span>$@(@Model.itemsDetail.SalesPrice-@Model.itemsDetail.PurchasePrice) off</span></h4>
+                            <h3>$@Model.itemsDetail.PurchasePrice</h3>
+                           
+                            <div class="product-description border-product">
+                              
+                                <div class="modal fade" id="sizemodal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Sheer Straight Kurta</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="~/FrontEnd/images/size-chart.jpg" alt=""
+                                                     class="img-fluid blur-up lazyload">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="tab-content nav-material" id="">
+                                <div class="" >
+                                    <div class="table">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Processor</td>
+                                                    <td>@Model.itemsDetail.Processor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gpu</td>
+                                                    <td>@Model.itemsDetail.Gpu</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>HardDisk</td>
+                                                    <td>@Model.itemsDetail.HardDisk</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>RamSize</td>
+                                                    <td>@Model.itemsDetail.RamSize</td>
+                                                </tr>
+
+                                            </tbody>
+                                       
+                                            <tbody>
+                                                <tr>
+                                                    <td>Os</td>
+                                                    <td>@Model.itemsDetail.OsName</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ScreenReslution</td>
+                                                    <td>@Model.itemsDetail.ScreenReslution</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ScreenSize</td>
+                                                    <td>@Model.itemsDetail.ScreenSize</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Weight</td>
+                                                    <td>@Model.itemsDetail.Weight</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                             
+                            </div>
+                            <div class="product-buttons">
+                            <a class="btn btn-solid" asp-controller="ShopingCart" asp-action="AddTocart" asp-route-itemId="@Model.itemsDetail.ItemId"> add</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section ends -->
+    <!-- product-tab starts -->
+  
+    <!-- product-tab ends -->
+    <!-- product section start -->
+    <section class="section-b-space ratio_asos">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 product-related">
+                    <h2>related products</h2>
+                </div>
+            </div>
+            <div class="row search-product">
+                @foreach(var item in Model.RecommendedItems){
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="product-box">
+                        <div class="img-wrapper">
+                            <div class="front">
+                                <a asp-controller="Show_Items" asp-action="Main" asp-route-Id="@item.ItemId">
+                                    <img src="~/Uploads/Items/@item.ImageName"
+                                         class="img-fluid blur-up lazyload bg-img" alt="">
+                                </a>
+                            </div>
+                            <div class="back">
+                                <a asp-controller ="Show_Items" asp-action="Main" asp-route-Id="@item.ItemId">
+                                    <img src="~/Uploads/Items/@item.ImageName"
+                                         class="img-fluid blur-up lazyload bg-img" alt="">
+                                </a>
+                            </div>
+                         
+                        </div>
+                        <div class="product-detail">
+                            
+                            <a href="product-page(no-sidebar).html">
+                                <h6>@item.ItemName</h6>
+                                
+                            </a>
+                            <h4>$@item.SalesPrice</h4>
+                      
+               
+                        </div>
+                    </div>
+                </div>
+               }
+            </div>
+        </div>
+    </section>
+    <!-- product section end -->
+   
